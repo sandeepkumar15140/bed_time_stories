@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magical Bedtime Stories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            color: #ff6b6b;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.3em;
+            color: #4ecdc4;
+        }
+        
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .category-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: 3px solid transparent;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: #ff6b6b;
+        }
+        
+        .category-card.active {
+            border-color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+        }
+        
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .category-title {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .category-count {
+            color: #666;
+            font-size: 1em;
+        }
+        
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .story-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .story-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .story-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #ff9a9e, #fecfef, #fecfef);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .story-content {
+            padding: 20px;
+        }
+        
+        .story-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        
+        .story-moral {
+            color: #4ecdc4;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .story-preview {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        
+        .bonding-tip {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 20px auto;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 800px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2em;
+            color: #ff6b6b;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .modal-story-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        
+        .modal-story-title {
+            font-size: 2.2em;
+            color: #333;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .modal-story-moral {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        
+        .modal-story-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 25px;
+        }
+        
+        .parent-guide {
+            background: linear-gradient(45deg, #ff9a9e, #fecfef);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        
+        .parent-guide h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .discussion-questions {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .bonding-activity {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .discussion-questions h4, .bonding-activity h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .discussion-questions ul, .bonding-activity ul {
+            margin-left: 20px;
+            color: #333;
+        }
+        
+        .discussion-questions li, .bonding-activity li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .search-input {
+            padding: 15px 25px;
+            font-size: 1.1em;
+            border: 3px solid #4ecdc4;
+            border-radius: 25px;
+            width: 300px;
+            outline: none;
+            font-family: inherit;
+        }
+        
+        .search-input:focus {
+            border-color: #ff6b6b;
+            box-shadow: 0 0 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .search-input {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .stories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                margin: 10px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💕 Family Story Time 💕</h1>
+            <p>Stories for parents and children to share together - Building bonds, one story at a time</p>
+            <div style="background: linear-gradient(45deg, #ff9a9e, #fecfef); padding: 20px; border-radius: 15px; margin-top: 20px; color: #333; font-size: 1.1em; line-height: 1.6;">
+                <strong>📖 For Parents:</strong> These stories are designed for you to read aloud to your children. Each story includes discussion questions and bonding activities to help create magical moments together. Reading to your child builds language skills, imagination, and most importantly - an unbreakable bond of love and trust.
+            </div>
+        </div>
+        
+        <div class="search-container">
+            <input type="text" class="search-input" placeholder="Search for a story..." id="searchInput">
+        </div>
+        
+        <div class="categories" id="categories">
+            <!-- Categories will be populated by JavaScript -->
+        </div>
+        
+        <div class="stories-grid" id="storiesGrid">
+            <!-- Stories will be populated by JavaScript -->
+        </div>
+    </div>
+    
+    <div class="modal" id="storyModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <div class="modal-story-image" id="modalImage"></div>
+            <h2 class="modal-story-title" id="modalTitle"></h2>
+            <div class="modal-story-moral" id="modalMoral"></div>
+            <div class="modal-story-text" id="modalText"></div>
+        </div>
+    </div>
+
+    <script>
+        const storyCategories = {
+            kindness: {
+                title: "Kindness & Friendship",
+                icon: "🤝",
+                color: "#ff6b6b",
+                stories: [
+                    {
+                        title: "The Sharing Squirrel",
+                        image: "🐿️",
+                        moral: "Sharing brings joy to everyone",
+                        preview: "A little squirrel learns that sharing nuts makes more friends...",
+                        bondingTip: "💝 Perfect for teaching generosity together",
+                        story: "Once upon a time, in a beautiful forest, there lived a little squirrel named Nutkin. Nutkin had collected many nuts for winter, more than he could ever eat. One day, he saw his friends - a rabbit, a bird, and a mouse - looking very hungry. At first, Nutkin wanted to keep all his nuts, but then he remembered how good it felt when others shared with him. So he decided to share his nuts with his friends. Everyone was so happy and grateful! From that day on, all the forest animals helped each other, and Nutkin learned that sharing made him feel much happier than keeping everything to himself. The forest became a place where everyone looked out for each other, and they all lived happily together.",
+                        discussionQuestions: [
+                            "How do you think Nutkin felt when he saw his hungry friends?",
+                            "What are some things you like to share with your friends?",
+                            "How does it feel when someone shares something special with you?",
+                            "Can you think of a time when sharing made you feel happy?"
+                        ],
+                        bondingActivity: [
+                            "Share a healthy snack together while discussing the story",
+                            "Make a 'sharing jar' where you both put in items to share with others",
+                            "Practice taking turns with a favorite toy or game",
+                            "Plan a way to share something with a neighbor or friend this week"
+                        ]
+                    },
+                    {
+                        title: "The Magic Hello",
+                        image: "👋",
+                        moral: "A simple greeting can brighten someone's day",
+                        preview: "Little Emma discovers the power of saying hello...",
+                        bondingTip: "👋 Great for building social confidence together",
+                        story: "Emma was a shy little girl who always looked down when walking to school. One morning, she decided to try something different. She looked up and said 'Hello!' to Mrs. Johnson, the elderly lady who sat on her porch every day. Mrs. Johnson's face lit up with the biggest smile Emma had ever seen. 'Hello, dear!' she replied warmly. Emma felt a warm feeling in her heart. The next day, she said hello to the mailman, and he waved back cheerfully. Soon, Emma was greeting everyone she met, and everywhere she went, people smiled and seemed happier. Emma learned that a simple 'hello' was like magic - it could turn strangers into friends and make the whole world feel brighter and more friendly.",
+                        discussionQuestions: [
+                            "Why do you think Emma felt shy at first?",
+                            "How do you feel when someone says hello to you with a big smile?",
+                            "Who are some people we could practice saying hello to?",
+                            "What other kind words make people feel good?"
+                        ],
+                        bondingActivity: [
+                            "Practice greeting each other in different fun ways",
+                            "Take a walk together and practice saying hello to neighbors",
+                            "Make a list of kind words that make people smile",
+                            "Role-play meeting new people and being friendly"
+                        ]
+                    },
+                    {
+                        title: "The Helpful Ant",
+                        image: "🐜",
+                        moral: "Even small acts of kindness make a big difference",
+                        preview: "A tiny ant shows that size doesn't matter when helping others...",
+                        bondingTip: "🐜 Perfect for showing that everyone can help",
+                        story: "In a busy garden lived a tiny ant named Andy. All the other insects were much bigger than him, and sometimes Andy felt too small to help anyone. One rainy day, a beautiful butterfly got caught in a spider's web near a puddle. The big insects tried to help but couldn't reach her without getting stuck themselves. Andy saw what was happening and had an idea. Being so small, he could crawl along the thin branches without breaking them. Carefully, he chewed through the web strands one by one until the butterfly was free. 'Thank you, little Andy!' said the butterfly. 'You may be small, but you have the biggest heart!' From that day on, Andy never felt too small to help, and all the garden insects knew they could count on their tiny friend for help.",
+                        discussionQuestions: [
+                            "How do you think Andy felt when others said he was too small?",
+                            "What are some ways you can help others, even if you're young?",
+                            "Can you think of a time when someone smaller helped someone bigger?",
+                            "What makes someone a good helper?"
+                        ],
+                        bondingActivity: [
+                            "Look for small ways to help around the house together",
+                            "Create a 'helper chart' with age-appropriate tasks",
+                            "Practice problem-solving with everyday challenges",
+                            "Celebrate small acts of kindness you both notice"
+                        ]
+                    },
+                    {
+                        title: "The Lost Puppy",
+                        image: "🐶",
+                        moral: "Helping others brings happiness to everyone",
+                        preview: "A group of friends work together to help a lost puppy find its home...",
+                        bondingTip: "🐶 Great for discussing teamwork and empathy",
+                        story: "One rainy afternoon, Mia and her friends found a shivering puppy under a bush. The puppy looked scared and hungry. Instead of walking by, the children worked together to keep the puppy warm and fed. They made posters and asked neighbors if anyone had lost a puppy. After a day of searching, they found the puppy's family, who were overjoyed to have their pet back. The children felt proud for helping and learned that kindness and teamwork can make a big difference.",
+                        discussionQuestions: [
+                            "How do you think the puppy felt when it was lost?",
+                            "What would you do if you found a lost animal?",
+                            "Why is it important to help others, even if it's hard?",
+                            "How did teamwork help the friends solve the problem?"
+                        ],
+                        bondingActivity: [
+                            "Make a kindness poster together for your neighborhood",
+                            "Role-play helping someone in need",
+                            "Volunteer to help at a local animal shelter",
+                            "Share a story about a time you helped someone"
+                        ]
+                    }
+                ]
+            },
+            courage: {
+                title: "Courage & Bravery",
+                icon: "🦁",
+                color: "#4ecdc4",
+                stories: [
+                    {
+                        title: "The Little Mouse's Big Heart",
+                        image: "🐭",
+                        moral: "Being brave doesn't mean being big",
+                        preview: "A tiny mouse shows great courage when it matters most...",
+                        bondingTip: "🐭 Great for teaching that courage comes in all sizes",
+                        story: "In a peaceful village lived a tiny mouse named Pip who was afraid of almost everything - loud noises, dark corners, and especially the village cat. One day, a fire started in the bakery where Pip lived. The baker's baby was sleeping upstairs, and everyone was too busy fighting the fire to notice. Pip saw the danger and felt very scared, but he knew he had to do something. His little heart pounding, he ran up the stairs through the smoke and squeaked as loudly as he could next to the baby's crib. The baby woke up and started crying, which alerted the firefighters to rush upstairs and save her. Even though Pip was the smallest creature in the village, his brave actions saved a life. Everyone learned that courage isn't about being big or strong - it's about doing what's right even when you're scared.",
+                        discussionQuestions: [
+                            "What made Pip feel scared at first?",
+                            "How did Pip find the courage to help the baby?",
+                            "Can you think of a time when you felt scared but did something brave anyway?",
+                            "What does it mean to be brave?"
+                        ],
+                        bondingActivity: [
+                            "Share stories of times when you both felt scared but were brave",
+                            "Practice 'brave breathing' together for scary situations",
+                            "Make a list of everyday brave things you both do",
+                            "Create a 'courage certificate' to celebrate brave moments"
+                        ]
+                    },
+                    {
+                        title: "Maya's First Day Fear",
+                        image: "🎒",
+                        moral: "Facing our fears makes us stronger",
+                        preview: "A nervous girl finds courage on her first day of school...",
+                        bondingTip: "🎒 Perfect for discussing new experiences together",
+                        story: "Maya was so nervous about her first day at a new school that her tummy felt full of butterflies. She didn't know anyone and was scared that no one would like her. Her mom walked her to the classroom door, but Maya's feet felt stuck to the ground. She wanted to run home and hide under her blankets. Taking a deep breath, Maya remembered what her grandma had told her: 'Courage isn't about not being scared, it's about doing something even when you are scared.' Maya squared her shoulders, walked into the classroom, and said 'Hello' to the girl sitting nearest to her. The girl smiled and invited Maya to sit next to her. By lunchtime, Maya had made three new friends and felt proud that she had faced her fear. She learned that being brave meant taking the first step, even with wobbly knees.",
+                        discussionQuestions: [
+                            "How do you think Maya felt before going to school?",
+                            "What helped Maya find her courage?",
+                            "What are some things that make you feel nervous?",
+                            "How can we help each other be brave?"
+                        ],
+                        bondingActivity: [
+                            "Practice introducing yourselves to new people",
+                            "Talk about upcoming changes and how to handle them",
+                            "Make a 'bravery plan' for new situations",
+                            "Celebrate times when you both tried something new"
+                        ]
+                    },
+                    {
+                        title: "The Night Light Adventure",
+                        image: "🌟",
+                        moral: "Facing your fears can lead to wonderful surprises",
+                        preview: "Sam overcomes his fear of the dark and discovers the beauty of the night...",
+                        bondingTip: "🌟 Perfect for talking about nighttime fears",
+                        story: "Sam was afraid of the dark and always slept with a bright night light. One evening, the power went out and Sam's room was pitch black. At first, he was scared, but his mom held his hand and together they looked out the window. Sam saw the stars twinkling and the moon shining brightly. He realized the night wasn't so scary after all. From that night on, Sam wasn't afraid of the dark, and he even enjoyed stargazing with his family.",
+                        discussionQuestions: [
+                            "What made Sam afraid of the dark?",
+                            "How did Sam's mom help him feel safe?",
+                            "What are some things you are afraid of?",
+                            "How can we help each other be brave?"
+                        ],
+                        bondingActivity: [
+                            "Have a stargazing night together",
+                            "Draw pictures of things you see in the night sky",
+                            "Make a list of things that help you feel brave",
+                            "Create a 'bravery jar' with notes about brave moments"
+                        ]
+                    }
+                ]
+            },
+            honesty: {
+                title: "Honesty & Truth",
+                icon: "🔍",
+                color: "#45b7d1",
+                stories: [
+                    {
+                        title: "The Broken Vase",
+                        image: "🏺",
+                        moral: "Telling the truth is always the right choice",
+                        preview: "Jake learns that honesty brings relief and trust...",
+                        bondingTip: "🏺 Perfect for teaching the value of honesty",
+                        story: "Jake was playing ball in the living room even though his mom had told him not to. When he threw the ball too hard, it knocked over his mom's favorite vase, and it shattered into pieces. Jake's heart sank as he looked at the broken vase. He could hear his mom coming downstairs and quickly thought about hiding the pieces and saying he didn't know what happened. But as he started to pick up the pieces, he remembered how his mom always told him that telling the truth was important. When his mom walked into the room and saw the broken vase, Jake took a deep breath and said, 'Mom, I'm really sorry. I was playing ball in the house and I broke your vase by accident.' His mom was quiet for a moment, then hugged him. 'Thank you for telling me the truth, Jake. I'm proud of your honesty. The vase can be replaced, but trust is much more valuable.' Jake felt relieved and learned that telling the truth, even when it's hard, always feels better than lying.",
+                        discussionQuestions: [
+                            "Why do you think Jake wanted to hide what happened at first?",
+                            "How did Jake feel after he told the truth?",
+                            "Why is it sometimes hard to tell the truth?",
+                            "How does it feel when someone is honest with you?"
+                        ],
+                        bondingActivity: [
+                            "Share a time when telling the truth was difficult for each of you",
+                            "Practice honest responses to common situations",
+                            "Make a family promise about always being truthful",
+                            "Discuss how honesty builds trust in relationships"
+                        ]
+                    },
+                    {
+                        title: "The Painted Wall",
+                        image: "🎨",
+                        moral: "Admitting mistakes helps us grow",
+                        preview: "Lila learns the importance of telling the truth after a colorful accident...",
+                        bondingTip: "🎨 Good for discussing honesty and responsibility",
+                        story: "Lila loved painting and one day decided to make a mural on her bedroom wall without asking her parents. When her mom saw the wall, she was surprised and a little upset. Lila felt nervous but decided to tell the truth. Her mom thanked her for being honest and together they cleaned up the wall. Later, her parents gave her a canvas to paint on. Lila learned that telling the truth and taking responsibility is always the best choice.",
+                        discussionQuestions: [
+                            "Why did Lila feel nervous about telling the truth?",
+                            "How did her mom react when Lila was honest?",
+                            "What should you do if you make a mistake?",
+                            "How does it feel to admit when you're wrong?"
+                        ],
+                        bondingActivity: [
+                            "Paint a picture together on paper or canvas",
+                            "Talk about a time you made a mistake and learned from it",
+                            "Make a family 'honesty pledge'",
+                            "Role-play different situations where honesty is important"
+                        ]
+                    }
+                ]
+            }
+        };
+
+        let currentCategory = 'all';
+        
+        function displayCategories() {
+            const categoriesContainer = document.getElementById('categories');
+            let categoriesHTML = `
+                <div class="category-card ${currentCategory === 'all' ? 'active' : ''}" onclick="filterByCategory('all')">
+                    <div class="category-icon">📚</div>
+                    <div class="category-title">All Stories</div>
+                    <div class="category-count">${getTotalStoryCount()} stories</div>
+                </div>
+            `;
+            
+            Object.entries(storyCategories).forEach(([key, category]) => {
+                categoriesHTML += `
+                    <div class="category-card ${currentCategory === key ? 'active' : ''}" onclick="filterByCategory('${key}')">
+                        <div class="category-icon">${category.icon}</div>
+                        <div class="category-title">${category.title}</div>
+                        <div class="category-count">${category.stories.length} stories</div>
+                    </div>
+                `;
+            });
+            
+            categoriesContainer.innerHTML = categoriesHTML;
+        }
+        
+        function getTotalStoryCount() {
+            return Object.values(storyCategories).reduce((total, category) => total + category.stories.length, 0);
+        }
+        
+        function filterByCategory(category) {
+            currentCategory = category;
+            displayCategories();
+            displayStories();
+            document.getElementById('searchInput').value = '';
+        }
+        
+        function displayStories() {
+            const storiesGrid = document.getElementById('storiesGrid');
+            let stories = [];
+            
+            if (currentCategory === 'all') {
+                Object.values(storyCategories).forEach(category => {
+                    stories = stories.concat(category.stories);
+                });
+            } else {
+                stories = storyCategories[currentCategory].stories;
+            }
+            
+            storiesGrid.innerHTML = stories.map(createStoryCard).join('');
+        }
+        
+        function createStoryCard(story) {
+            return `
+                <div class="story-card" onclick="openStory('${story.title.replace(/'/g, "\\'")}')">
+                    <div class="story-image">${story.image}</div>
+                    <div class="story-content">
+                        <div class="story-title">${story.title}</div>
+                        <div class="story-moral">Moral: ${story.moral}</div>
+                        <div class="story-preview">${story.preview}</div>
+                        <div class="bonding-tip">${story.bondingTip || '💝 Great for family bonding'}</div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function findStoryByTitle(title) {
+            for (let category of Object.values(storyCategories)) {
+                const story = category.stories.find(s => s.title === title);
+                if (story) return story;
+            }
+            return null;
+        }
+        
+        function openStory(title) {
+            const story = findStoryByTitle(title);
+            if (story) {
+                document.getElementById('modalImage').textContent = story.image;
+                document.getElementById('modalTitle').textContent = story.title;
+                document.getElementById('modalMoral').textContent = story.moral;
+                
+                let storyContent = `<div class="modal-story-text">${story.story}</div>`;
+                
+                if (story.discussionQuestions || story.bondingActivity) {
+                    storyContent += `
+                        <div class="parent-guide">
+                            <h3>👨‍👩‍👧‍👦 Parent-Child Bonding Guide</h3>
+                            ${story.discussionQuestions ? `
+                                <div class="discussion-questions">
+                                    <h4>💭 Discussion Questions:</h4>
+                                    <ul>
+                                        ${story.discussionQuestions.map(q => `<li>${q}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                            ${story.bondingActivity ? `
+                                <div class="bonding-activity">
+                                    <h4>🎯 Bonding Activities:</h4>
+                                    <ul>
+                                        ${story.bondingActivity.map(a => `<li>${a}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('modalText').innerHTML = storyContent;
+                document.getElementById('storyModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+        
+        function closeModal() {
+            document.getElementById('storyModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                if (searchTerm === '') {
+                    displayStories();
+                } else {
+                    searchStories(searchTerm);
+                }
+            });
+        }
+        
+        function searchStories(searchTerm) {
+            const allStories = [];
+            Object.values(storyCategories).forEach(category => {
+                category.stories.forEach(story => {
+                    allStories.push(story);
+                });
+            });
+            
+            const filteredStories = allStories.filter(story => 
+                story.title.toLowerCase().includes(searchTerm) ||
+                story.moral.toLowerCase().includes(searchTerm) ||
+                story.preview.toLowerCase().includes(searchTerm) ||
+                story.story.toLowerCase().includes(searchTerm)
+            );
+            
+            const storiesGrid = document.getElementById('storiesGrid');
+            if (filteredStories.length === 0) {
+                storiesGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.9); border-radius: 15px; color: #666; font-size: 1.2em;">
+                        <div style="font-size: 3em; margin-bottom: 20px;">📚</div>
+                        No stories found for "${searchTerm}"<br>
+                        <small style="color: #999;">Try searching for different keywords like "friendship", "brave", or "honest"</small>
+                    </div>
+                `;
+            } else {
+                storiesGrid.innerHTML = filteredStories.map(createStoryCard).join('');
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            displayCategories();
+            displayStories();
+            setupSearch();
+            
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            
+            document.getElementById('storyModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
